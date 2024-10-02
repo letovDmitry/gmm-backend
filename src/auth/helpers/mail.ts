@@ -2,8 +2,8 @@ import * as nodemailer from "nodemailer";
 var Mailgen = require("mailgen");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 485,
+  host: "smtp.yandex.ru",
+  port: 465,
   secure: true,
   auth: {
     user: process.env.MAIL_USER,
@@ -11,9 +11,19 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendMail = async (pass: string, email: string) => {
+export const sendMail = async (
+  pass: string,
+  email: string,
+  type: "recover" | "signup"
+) => {
+  console.log({
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
+  });
   const config = {
-    service: "gmail",
+    host: "smtp.yandex.ru",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
@@ -32,19 +42,26 @@ export const sendMail = async (pass: string, email: string) => {
 
   const response = {
     body: {
+      title: "Привет," + email,
       name: email,
-      intro: "Your password is " + pass,
+      intro: "Твой пароль для входа в личный кабинет: " + pass,
+      action: {
+        button: {
+          color: "#4971ff",
+          text: "Войти в кабинет",
+          link: "https://anyboost.ru/login",
+        },
+      },
+      signature: "С уважением команда",
     },
-    outro:
-      "If you did not request a password, no further action is required on your part.",
   };
 
   const mail = mailGenerator.generate(response);
 
   const message = {
-    from: "vaspupkin976@gmail.com",
+    from: "info@anyboost.net",
     to: email,
-    subject: "Registration",
+    subject: type === "recover" ? "Восстановление пароля" : "Регистрация",
     html: mail,
   };
 

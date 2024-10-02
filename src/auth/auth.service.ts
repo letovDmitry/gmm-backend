@@ -29,7 +29,7 @@ export class AuthService {
         },
       });
 
-      if (!dto.password) await sendMail(password, dto.email);
+      if (!dto.password) await sendMail(password, dto.email, "signup");
 
       console.log(password);
 
