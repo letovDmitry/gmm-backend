@@ -59,7 +59,7 @@ export const sendMail = async (
   const mail = mailGenerator.generate(response);
 
   const message = {
-    from: "info@anyboost.net",
+    from: "ya@gamemoney.ru",
     to: email,
     subject: type === "recover" ? "Восстановление пароля" : "Регистрация",
     html: mail,
