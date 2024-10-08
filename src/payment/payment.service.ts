@@ -22,6 +22,7 @@ export class PaymentService {
 
     // payment['NotificationURL'] = "http://localhost:8000/api/tinkoff/callback"
     const res = await axios.post(`${this.prodUrl}/v2/Init`, payment);
+    console.log(res);
     return res.data.PaymentURL;
   }
 
