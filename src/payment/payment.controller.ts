@@ -7,6 +7,13 @@ import { GetUser } from "src/auth/decorator";
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
+  @Post()
+  async paymentInit(@Body() payment: { amount: number }) {
+    return await this.paymentService.generateTestUrl({
+      Amount: payment.amount,
+    });
+  }
+
   @UseGuards(JwtGuard)
   @Post("enot")
   createPaymentEnot(@Body() dto: any, @GetUser("id") userId: number) {

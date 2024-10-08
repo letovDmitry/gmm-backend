@@ -2,10 +2,41 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import axios from "axios";
 import { PrismaService } from "src/prisma/prisma.service";
+import { randomInt } from "crypto";
 
 @Injectable()
 export class PaymentService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
+
+  testUrl = process.env.TINKOFF_TEST_URL;
+  prodUrl = process.env.TINKOFF_API_URL;
+
+  async generateUrl(payment: any) {}
+
+  async generateTestUrl(payment: any) {
+    this.setSuccessUrl(payment);
+    this.setFailUrL(payment);
+    this.setEnvParams(payment);
+    payment["Description"] = "Пополнение счета";
+    payment["OrderId"] = randomInt(50000).toString();
+
+    // payment['NotificationURL'] = "http://localhost:8000/api/tinkoff/callback"
+    const res = await axios.post(`${this.prodUrl}/v2/Init`, payment);
+    return res.data.PaymentURL;
+  }
+
+  async setSuccessUrl(payment: any) {
+    payment["SuccessURL"] = "https://teamproject.site/success";
+  }
+
+  async setEnvParams(payment: any) {
+    payment["TerminalKey"] = process.env.TINKOFF_TERMINAL;
+    payment["Token"] = process.env.TINKOFF_SECRET_KEY;
+  }
+
+  async setFailUrL(payment: any) {
+    payment["FailURL"] = "https://teamproject.site/fail";
+  }
 
   async createPaymentEnot(
     amount: number,
