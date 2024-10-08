@@ -9,6 +9,7 @@ export class PaymentController {
 
   @Post()
   async paymentInit(@Body() payment: { amount: number }) {
+    console.log(payment);
     return await this.paymentService.generateTestUrl({
       Amount: payment.amount,
     });
