@@ -14,6 +14,7 @@ export class PaymentService {
   async generateUrl(payment: any) {}
 
   async generateTestUrl(payment: any) {
+    console.log(payment);
     this.setSuccessUrl(payment);
     this.setFailUrL(payment);
     this.setEnvParams(payment);
